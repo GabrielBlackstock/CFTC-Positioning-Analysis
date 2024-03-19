@@ -1,0 +1,41 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Sample data for the BTC closing prices and number of long positions
+dates = ['03/10/2023', '10/10/2023', '17/10/2023', '24/10/2023', '31/10/2023']
+btc_closing_prices = np.array([27429.98, 27391.02, 28415.75, 33901.53, 34667.78])
+number_of_long_positions = np.array([2373, 2373, 2576, 3536, 4780])
+
+# Create a figure and a set of subplots
+fig, ax1 = plt.subplots()
+
+# Bar chart for the BTC closing prices on the left y-axis with green color
+bars = ax1.bar(dates, btc_closing_prices, color='g', label='BTC Closing Price')
+ax1.set_xlabel('Date')
+ax1.set_ylabel('BTC Closing Price ($)', color='g')
+ax1.tick_params(axis='y', labelcolor='g')
+ax1.set_ylim(0, max(btc_closing_prices) * 1.1)
+
+# Create a second y-axis for the number of long positions
+ax2 = ax1.twinx()
+ax2.set_ylabel('Number of Long Positions', color='black')
+ax2.tick_params(axis='y', labelcolor='black')
+ax2.set_ylim(0, max(number_of_long_positions) * 1.1)
+
+# Plot bullet points for the number of long positions on the bars
+ax2.plot(dates, number_of_long_positions, 'ko', label='Open Long Positions')  # 'ko' stands for black circle markers
+
+# Compute the correlation coefficient
+correlation = np.corrcoef(btc_closing_prices, number_of_long_positions)[0, 1]
+
+# Add legend
+legend_labels = [plt.Line2D([0], [0], color='g', lw=4, label='BTC Closing Price'),
+                 plt.Line2D([0], [0], marker='o', color='w', label='Open Long Positions',
+                            markerfacecolor='k', markersize=10)]
+ax1.legend(handles=legend_labels, loc='upper left')
+
+# Set the title to include the correlation coefficient
+plt.title(f'BTC Closing Prices and Number of Long Positions for October 2023\nCorrelation Coefficient: {correlation:.2f}')
+
+# Show the plot
+plt.show()
